@@ -37,8 +37,9 @@ import 'prismjs/components/prism-bash'
 import React from 'react'
 import { useRouter } from 'next/router'
 import { bootstrap } from 'lib/bootstrap-client'
-import { fathomId, fathomConfig } from 'lib/config'
+import { fathomId, fathomConfig, gaTrackingId } from 'lib/config'
 import * as Fathom from 'fathom-client'
+import ReactGA from 'react-ga'
 
 if (typeof window !== 'undefined') {
   bootstrap()
@@ -53,6 +54,19 @@ export default function App({ Component, pageProps }) {
 
       function onRouteChangeComplete() {
         Fathom.trackPageview()
+      }
+
+      router.events.on('routeChangeComplete', onRouteChangeComplete)
+
+      return () => {
+        router.events.off('routeChangeComplete', onRouteChangeComplete)
+      }
+    }
+
+    if (gaTrackingId) {
+      ReactGA.initialize(gaTrackingId)
+      function onRouteChangeComplete(url) {
+        ReactGA.pageview(url)
       }
 
       router.events.on('routeChangeComplete', onRouteChangeComplete)
