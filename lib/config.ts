@@ -134,12 +134,10 @@ export const firebaseCollectionImages = getEnv(
   defaultEnvValueForPreviewImageSupport
 )
 
+// had to hardcode here since it's not available on the client side
 export const gaTrackingId = isDev
   ? null
-  : getEnv(
-    'GOOGLE_ANALYTICS_TRACKING_ID',
-    null
-  )
+  : "UA-62876584-1"
 
 // this hack is necessary because vercel doesn't support secret files so we need to encode our google
 // credentials a base64-encoded string of the JSON-ified content
